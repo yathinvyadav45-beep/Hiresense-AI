@@ -1,0 +1,1 @@
+My project is Hiresense AI Smart requirement System is usefull for job seekers and feshers ,in my project have easy check ATS score and it would be helpful for giving information about you choosen company and it will provide test to you if you pass then it will provide interview date 
