@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>HireSense AI | Smart Recruitment Platform</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+  <style>
+  :root {
+    --bg:#030712;
+    --cyan:#00e5ff;
+    --violet:#8b5cf6;
+    --text:#f1f5f9;
+    --muted:#64748b;
+    --border:rgba(255,255,255,0.07);
+    --card:rgba(255,255,255,0.04);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;overflow-x:hidden;}
+
+  /* GRID BG */
+  body::before {
+    content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+    background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);
+    background-size:60px 60px;
+  }
+
+  /* NAV */
+  nav {
+    position:fixed;top:0;width:100%;z-index:1000;
+    padding:18px 8%;
+    display:flex;justify-content:space-between;align-items:center;
+    background:rgba(3,7,18,0.75);
+    backdrop-filter:blur(18px);
+    border-bottom:1px solid var(--border);
+  }
+  .logo {font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:white;}
+  .logo span{color:var(--cyan);}
+  nav ul{display:flex;gap:30px;list-style:none;}
+  nav ul li a{color:#94a3b8;text-decoration:none;font-size:14px;transition:0.3s;font-weight:500;}
+  nav ul li a:hover{color:var(--cyan);}
+  .nav-actions{display:flex;gap:12px;align-items:center;}
+  .nav-btn {
+    padding:10px 22px;border:none;border-radius:40px;
+    background:linear-gradient(135deg,var(--cyan),var(--violet));
+    color:white;font-weight:600;font-size:14px;cursor:pointer;
+    transition:0.3s;font-family:'DM Sans',sans-serif;
+  }
+  .nav-btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,229,255,0.3);}
+
+  /* HERO */
+  .hero {
+    min-height:100vh;display:flex;align-items:center;
+    justify-content:space-between;padding:130px 8% 80px;
+    position:relative;z-index:2;
+  }
+  .hero-badge {
+    display:inline-flex;align-items:center;gap:8px;
+    background:rgba(0,229,255,0.08);border:1px solid rgba(0,229,255,0.2);
+    color:var(--cyan);font-size:12px;font-weight:600;letter-spacing:1.5px;
+    padding:6px 16px;border-radius:30px;margin-bottom:24px;
+  }
+  .hero-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--cyan);animation:pulse 2s infinite;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+  .hero-text{width:55%;z-index:2;}
+  .hero-text h1{
+    font-family:'Syne',sans-serif;
+    font-size:68px;line-height:1.05;margin-bottom:22px;font-weight:800;
+  }
+  .hero-text h1 .grad{
+    background:linear-gradient(135deg,var(--cyan),var(--violet));
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  }
+  .hero-text p{color:#94a3b8;font-size:17px;line-height:1.8;margin-bottom:36px;max-width:560px;}
+  .hero-buttons{display:flex;gap:16px;flex-wrap:wrap;}
+  .btn-primary {
+    padding:16px 32px;border:none;border-radius:50px;
+    background:linear-gradient(135deg,var(--cyan),var(--violet));
+    color:white;font-size:15px;font-weight:700;cursor:pointer;
+    transition:0.4s;font-family:'Syne',sans-serif;
+    display:flex;align-items:center;gap:8px;
+  }
+  .btn-primary:hover{transform:translateY(-4px);box-shadow:0 16px 35px rgba(0,229,255,0.35);}
+  .btn-demo {
+    padding:16px 32px;border:1px solid rgba(0,229,255,0.3);border-radius:50px;
+    background:rgba(0,229,255,0.05);color:var(--cyan);font-size:15px;
+    font-weight:600;cursor:pointer;transition:0.4s;font-family:'Syne',sans-serif;
+    display:flex;align-items:center;gap:8px;
+  }
+  .btn-demo:hover{background:rgba(0,229,255,0.12);transform:translateY(-4px);}
+
+  /* HERO CARD */
+  .hero-image{width:40%;position:relative;z-index:2;}
+  .dashboard {
+    width:100%;border-radius:28px;
+    background:rgba(255,255,255,0.04);
+    backdrop-filter:blur(18px);
+    border:1px solid rgba(255,255,255,0.08);
+    padding:28px;
+    box-shadow:0 30px 60px rgba(0,0,0,0.5),0 0 80px rgba(0,229,255,0.05);
+    animation:float 5s ease-in-out infinite alternate;
+  }
+  @keyframes float{from{transform:translateY(0);}to{transform:translateY(-16px);}}
+  .top-bar{display:flex;justify-content:space-between;margin-bottom:20px;align-items:center;}
+  .dots{display:flex;gap:7px;}
+  .dot-c{width:12px;height:12px;border-radius:50%;}
+  .r{background:#ff5f57;}.y{background:#febc2e;}.g{background:#28c840;}
+  .tag{font-size:11px;color:var(--muted);background:var(--card);padding:4px 10px;border-radius:8px;border:1px solid var(--border);}
+  .analytics{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  .a-card {
+    background:rgba(255,255,255,0.04);
+    padding:18px;border-radius:18px;border:1px solid var(--border);transition:0.3s;
+  }
+  .a-card:hover{transform:translateY(-4px);border-color:rgba(0,229,255,0.3);}
+  .a-card i{font-size:22px;color:var(--cyan);margin-bottom:12px;display:block;}
+  .a-card h3{font-family:'Syne',sans-serif;font-size:24px;margin-bottom:5px;}
+  .a-card p{color:var(--muted);font-size:13px;}
+  .ats-bar-wrap{margin-top:16px;background:var(--card);border-radius:18px;padding:18px;border:1px solid var(--border);}
+  .ats-label{display:flex;justify-content:space-between;font-size:13px;color:#94a3b8;margin-bottom:10px;}
+  .bar-bg{height:8px;background:rgba(255,255,255,0.06);border-radius:6px;overflow:hidden;}
+  .bar-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--cyan),var(--violet));animation:barGrow 2s ease forwards;}
+  @keyframes barGrow{from{width:0;}to{width:78%;}}
+
+  /* FEATURES */
+  .features{padding:100px 8%;text-align:center;position:relative;z-index:2;}
+  .section-tag {
+    display:inline-block;
+    background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.25);
+    color:var(--violet);font-size:11px;font-weight:700;letter-spacing:2px;
+    padding:5px 14px;border-radius:20px;margin-bottom:20px;
+  }
+  .section-title{font-family:'Syne',sans-serif;font-size:46px;font-weight:800;margin-bottom:16px;}
+  .section-title span{color:var(--cyan);}
+  .section-sub{color:var(--muted);max-width:650px;margin:0 auto 60px;line-height:1.8;font-size:16px;}
+  .feature-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;}
+  .feature-box {
+    background:rgba(255,255,255,0.03);border:1px solid var(--border);
+    border-radius:22px;padding:32px;transition:0.4s;position:relative;overflow:hidden;text-align:left;
+  }
+  .feature-box::before{
+    content:'';position:absolute;width:180px;height:180px;
+    background:var(--cyan);opacity:0.04;border-radius:50%;top:-90px;right:-90px;
+  }
+  .feature-box:hover{transform:translateY(-8px);border-color:rgba(0,229,255,0.3);box-shadow:0 20px 40px rgba(0,229,255,0.08);}
+  .feature-box .icon{
+    width:52px;height:52px;border-radius:14px;
+    background:rgba(0,229,255,0.08);border:1px solid rgba(0,229,255,0.15);
+    display:flex;align-items:center;justify-content:center;
+    margin-bottom:20px;
+  }
+  .feature-box .icon i{font-size:22px;color:var(--cyan);}
+  .feature-box h3{font-family:'Syne',sans-serif;font-size:20px;margin-bottom:12px;}
+  .feature-box p{color:var(--muted);line-height:1.7;font-size:14px;}
+
+  /* PROCESS */
+  .process{padding:100px 8%;position:relative;z-index:2;}
+  .process-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:30px;margin-top:60px;}
+  .step {
+    text-align:center;padding:30px 20px;
+    background:var(--card);border-radius:20px;border:1px solid var(--border);
+    position:relative;transition:0.4s;
+  }
+  .step:hover{transform:translateY(-6px);border-color:rgba(139,92,246,0.3);}
+  .step-num {
+    width:50px;height:50px;border-radius:50%;
+    background:linear-gradient(135deg,var(--cyan),var(--violet));
+    color:white;font-family:'Syne',sans-serif;font-weight:800;font-size:18px;
+    display:flex;align-items:center;justify-content:center;margin:0 auto 18px;
+  }
+  .step h4{font-family:'Syne',sans-serif;font-size:17px;margin-bottom:10px;}
+  .step p{color:var(--muted);font-size:13px;line-height:1.7;}
+
+  /* CTA */
+  .cta {
+    margin:60px 8%;padding:70px;border-radius:32px;
+    background:linear-gradient(135deg,#0a1628,#12082a);
+    border:1px solid var(--border);text-align:center;
+    position:relative;overflow:hidden;z-index:2;
+  }
+  .cta::before{
+    content:'';position:absolute;width:400px;height:400px;
+    background:rgba(0,229,255,0.07);border-radius:50%;
+    top:-200px;left:-100px;pointer-events:none;
+  }
+  .cta::after{
+    content:'';position:absolute;width:300px;height:300px;
+    background:rgba(139,92,246,0.07);border-radius:50%;
+    bottom:-150px;right:-80px;pointer-events:none;
+  }
+  .cta h2{font-family:'Syne',sans-serif;font-size:48px;margin-bottom:16px;position:relative;z-index:2;}
+  .cta p{color:#94a3b8;max-width:600px;margin:0 auto 36px;line-height:1.8;position:relative;z-index:2;}
+  .cta button{
+    padding:18px 42px;border:none;border-radius:50px;
+    background:linear-gradient(135deg,var(--cyan),var(--violet));
+    color:white;font-family:'Syne',sans-serif;font-size:16px;font-weight:700;
+    cursor:pointer;transition:0.4s;position:relative;z-index:2;
+  }
+  .cta button:hover{transform:translateY(-3px);box-shadow:0 15px 35px rgba(0,229,255,0.3);}
+
+  footer{padding:35px 8%;text-align:center;border-top:1px solid var(--border);color:var(--muted);font-size:14px;position:relative;z-index:2;}
+
+  @media(max-width:1000px){
+    .hero{flex-direction:column;text-align:center;}
+    .hero-text{width:100%;margin-bottom:50px;}
+    .hero-image{width:90%;}
+    .hero-buttons{justify-content:center;}
+    .hero-text h1{font-size:46px;}
+    nav ul{display:none;}
+    .cta{padding:50px 30px;}
+    .cta h2{font-size:32px;}
+  }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Hire<span>Sense</span> AI</div>
+  <ul>
+    <li><a href="#">Home</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#process">How it Works</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+  <div class="nav-actions">
+    <button class="nav-btn" onclick="window.location.href='jobportal.html'">Start Hiring</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-text">
+    <div class="hero-badge">
+      <div class="dot"></div>
+      AI-POWERED SMART RECRUITMENT
+    </div>
+    <h1>The Future of<br><span class="grad">AI Recruitment</span><br>Starts Here</h1>
+    <p>HireSense AI transforms recruitment with intelligent ATS resume screening, smart candidate analysis, and automated scheduling — built for BCA & MCA graduates and experienced professionals.</p>
+    <div class="hero-buttons">
+      <button class="btn-primary" onclick="window.location.href='jobportal.html'">
+        <i class="fa-solid fa-rocket"></i> Start Hiring
+      </button>
+      <button class="btn-demo" onclick="window.location.href='demo.html'">
+        <i class="fa-solid fa-play"></i> Watch Demo
+      </button>
+    </div>
+  </div>
+
+  <div class="hero-image">
+    <div class="dashboard">
+      <div class="top-bar">
+        <div class="dots">
+          <div class="dot-c r"></div>
+          <div class="dot-c y"></div>
+          <div class="dot-c g"></div>
+        </div>
+        <div class="tag">Live Dashboard</div>
+      </div>
+      <div class="analytics">
+        <div class="a-card">
+          <i class="fa-solid fa-users"></i>
+          <h3>2.4K+</h3>
+          <p>Active Candidates</p>
+        </div>
+        <div class="a-card">
+          <i class="fa-solid fa-briefcase"></i>
+          <h3>450+</h3>
+          <p>Job Openings</p>
+        </div>
+        <div class="a-card">
+          <i class="fa-solid fa-user-check"></i>
+          <h3>98%</h3>
+          <p>AI Accuracy</p>
+        </div>
+        <div class="a-card">
+          <i class="fa-solid fa-clock"></i>
+          <h3>70%</h3>
+          <p>Faster Hiring</p>
+        </div>
+      </div>
+      <div class="ats-bar-wrap">
+        <div class="ats-label"><span>Average ATS Score</span><span style="color:var(--cyan)">78%</span></div>
+        <div class="bar-bg"><div class="bar-fill"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="section-tag">PLATFORM FEATURES</div>
+  <h2 class="section-title">Why Choose <span>HireSense AI</span></h2>
+  <p class="section-sub">A modern recruitment ecosystem powered by NLP and machine learning — designed for students, freshers, and experienced professionals.</p>
+  <div class="feature-grid">
+    <div class="feature-box">
+      <div class="icon"><i class="fa-solid fa-brain"></i></div>
+      <h3>NLP Resume Screening</h3>
+      <p>Automatically analyze resumes using advanced NLP and shortlist top candidates based on skills, experience, and ATS compatibility.</p>
+    </div>
+    <div class="feature-box">
+      <div class="icon"><i class="fa-solid fa-chart-line"></i></div>
+      <h3>Smart ATS Scoring</h3>
+      <p>Get a real-time ATS score for your resume. Minimum score of 60 required for eligibility — we tell you exactly how to improve.</p>
+    </div>
+    <div class="feature-box">
+      <div class="icon"><i class="fa-solid fa-robot"></i></div>
+      <h3>AI Interview Scheduler</h3>
+      <p>Eligible candidates receive automated test dates and HR interview schedules directly tied to company selection.</p>
+    </div>
+    <div class="feature-box">
+      <div class="icon"><i class="fa-solid fa-building"></i></div>
+      <h3>Multi-Company Apply</h3>
+      <p>Choose from top companies like TCS, Infosys, Wipro, HCL and more — apply to your preferred company after clearing eligibility.</p>
+    </div>
+    <div class="feature-box">
+      <div class="icon"><i class="fa-solid fa-bolt"></i></div>
+      <h3>Fast Hiring Pipeline</h3>
+      <p>Reduce manual recruitment time by 70% with AI workflows — from resume upload to interview scheduling in minutes.</p>
+    </div>
+    <div class="feature-box">
+      <div class="icon"><i class="fa-solid fa-shield-halved"></i></div>
+      <h3>Secure & Private</h3>
+      <p>Enterprise-level encryption for all candidate data with secure access management and privacy compliance.</p>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="process" id="process">
+  <div style="text-align:center">
+    <div class="section-tag">PROCESS</div>
+    <h2 class="section-title">How It <span>Works</span></h2>
+    <p class="section-sub">Simple 4-step process from resume upload to getting your interview date.</p>
+  </div>
+  <div class="process-grid">
+    <div class="step">
+      <div class="step-num">1</div>
+      <h4>Upload Resume</h4>
+      <p>Upload your resume in PDF format for instant NLP-based analysis and ATS scoring.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <h4>ATS Screening</h4>
+      <p>Our AI checks your resume. Score 60+ means you're eligible to proceed.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <h4>Select Company</h4>
+      <p>Choose your preferred company from our partner list and get your test date.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <h4>Interview & Offer</h4>
+      <p>Clear the aptitude test and receive your HR interview slot automatically.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <h2>Ready to Start Your Journey?</h2>
+  <p>Join the next generation of intelligent hiring. Upload your resume, clear the ATS, and land your dream job with HireSense AI.</p>
+  <button onclick="window.location.href='jobportal.html'">
+    <i class="fa-solid fa-rocket"></i> Launch HireSense AI
+  </button>
+</section>
+
+<footer>© 2026 HireSense AI Recruitment System | Designed for Modern Hiring</footer>
+
+</body>
+</html>

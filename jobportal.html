@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>HireSense AI | Job Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+:root{
+  --bg:#030712;--surface:#0d1117;--cyan:#00e5ff;--violet:#8b5cf6;
+  --green:#10b981;--red:#ef4444;--orange:#f59e0b;
+  --text:#f1f5f9;--muted:#64748b;--border:rgba(255,255,255,0.07);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;}
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);
+  background-size:60px 60px;
+}
+
+/* NAV */
+nav{
+  position:sticky;top:0;width:100%;z-index:100;
+  padding:16px 5%;display:flex;align-items:center;justify-content:space-between;
+  background:rgba(3,7,18,0.85);backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--border);
+}
+.logo{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;}
+.logo span{color:var(--cyan);}
+.back-btn{
+  padding:8px 18px;border:1px solid var(--border);border-radius:30px;
+  background:transparent;color:#94a3b8;font-size:13px;cursor:pointer;
+  transition:0.3s;font-family:'DM Sans',sans-serif;
+  display:flex;align-items:center;gap:7px;
+}
+.back-btn:hover{border-color:var(--cyan);color:var(--cyan);}
+
+/* MAIN LAYOUT */
+.portal-wrap{
+  max-width:1100px;margin:0 auto;
+  padding:40px 5%;position:relative;z-index:2;
+}
+.portal-header{margin-bottom:36px;text-align:center;}
+.portal-header h1{
+  font-family:'Syne',sans-serif;font-size:42px;font-weight:800;margin-bottom:12px;
+}
+.portal-header h1 span{color:var(--cyan);}
+.portal-header p{color:var(--muted);font-size:16px;}
+
+/* ELIGIBILITY BANNER */
+.eligibility{
+  display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:36px;
+}
+.elig-card{
+  background:rgba(255,255,255,0.03);border:1px solid var(--border);
+  border-radius:20px;padding:24px;
+}
+.elig-card h3{
+  font-family:'Syne',sans-serif;font-size:15px;font-weight:700;
+  color:var(--cyan);margin-bottom:14px;letter-spacing:1px;text-transform:uppercase;
+}
+.pill-list{display:flex;flex-wrap:wrap;gap:8px;}
+.pill{
+  background:rgba(0,229,255,0.07);border:1px solid rgba(0,229,255,0.15);
+  color:#94a3b8;font-size:13px;padding:5px 12px;border-radius:20px;
+}
+.pill.highlight{background:rgba(139,92,246,0.1);border-color:rgba(139,92,246,0.25);color:#c4b5fd;}
+
+/* UPLOAD SECTION */
+.upload-section{
+  background:rgba(255,255,255,0.03);border:1px solid var(--border);
+  border-radius:24px;padding:36px;margin-bottom:30px;
+}
+.upload-section h2{font-family:'Syne',sans-serif;font-size:24px;margin-bottom:8px;}
+.upload-section .sub{color:var(--muted);font-size:14px;margin-bottom:28px;}
+
+.drop-zone{
+  border:2px dashed rgba(0,229,255,0.25);border-radius:18px;
+  padding:40px;text-align:center;cursor:pointer;
+  transition:0.3s;background:rgba(0,229,255,0.02);position:relative;
+}
+.drop-zone:hover,.drop-zone.dragover{
+  border-color:var(--cyan);background:rgba(0,229,255,0.06);
+}
+.drop-zone input[type=file]{
+  position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;
+}
+.drop-zone i{font-size:40px;color:var(--cyan);margin-bottom:14px;display:block;}
+.drop-zone p{color:#94a3b8;font-size:15px;}
+.drop-zone span{color:var(--cyan);font-weight:600;}
+.file-info{
+  display:none;align-items:center;gap:12px;
+  margin-top:16px;background:rgba(16,185,129,0.08);
+  border:1px solid rgba(16,185,129,0.2);border-radius:12px;padding:12px 18px;
+}
+.file-info i{color:var(--green);}
+.file-info span{font-size:14px;color:#a7f3d0;}
+
+.check-btn{
+  margin-top:20px;width:100%;padding:16px;
+  border:none;border-radius:14px;
+  background:linear-gradient(135deg,var(--cyan),var(--violet));
+  color:white;font-family:'Syne',sans-serif;font-size:16px;font-weight:700;
+  cursor:pointer;transition:0.4s;display:flex;align-items:center;justify-content:center;gap:10px;
+}
+.check-btn:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(0,229,255,0.3);}
+.check-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none;}
+
+/* SPINNER */
+.spinner{
+  display:none;width:22px;height:22px;border:3px solid rgba(255,255,255,0.3);
+  border-top-color:white;border-radius:50%;animation:spin 0.7s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* RESULT SECTION */
+.result-section{display:none;}
+
+/* SCORE CARD */
+.score-card{
+  border-radius:24px;padding:36px;margin-bottom:24px;
+  text-align:center;position:relative;overflow:hidden;
+}
+.score-card.eligible{
+  background:linear-gradient(135deg,rgba(16,185,129,0.1),rgba(0,229,255,0.08));
+  border:1px solid rgba(16,185,129,0.3);
+}
+.score-card.noteligible{
+  background:linear-gradient(135deg,rgba(239,68,68,0.1),rgba(245,158,11,0.05));
+  border:1px solid rgba(239,68,68,0.3);
+}
+.score-ring{
+  width:130px;height:130px;margin:0 auto 20px;
+  position:relative;display:flex;align-items:center;justify-content:center;
+}
+.score-ring svg{position:absolute;inset:0;transform:rotate(-90deg);}
+.score-ring circle{fill:none;stroke-width:8;stroke-linecap:round;}
+.track{stroke:rgba(255,255,255,0.07);}
+.prog{stroke-dasharray:340;stroke-dashoffset:340;transition:stroke-dashoffset 1.5s ease;}
+.score-num{font-family:'Syne',sans-serif;font-size:36px;font-weight:800;}
+.score-num .pct{font-size:16px;color:var(--muted);}
+.score-status{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;margin-bottom:10px;}
+.score-msg{color:#94a3b8;font-size:15px;max-width:500px;margin:0 auto;}
+
+/* SKILLS ROW */
+.skills-row{
+  display:flex;flex-wrap:wrap;gap:8px;margin-top:20px;justify-content:center;
+}
+.s-pill{
+  padding:5px 14px;border-radius:20px;font-size:13px;font-weight:500;
+}
+.s-pill.match{background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.25);color:#6ee7b7;}
+.s-pill.miss{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:#fca5a5;}
+
+/* IMPROVE TIPS */
+.improve-box{
+  background:rgba(245,158,11,0.07);border:1px solid rgba(245,158,11,0.2);
+  border-radius:18px;padding:24px;margin-bottom:24px;
+}
+.improve-box h3{
+  font-family:'Syne',sans-serif;font-size:17px;color:var(--orange);
+  margin-bottom:14px;display:flex;align-items:center;gap:8px;
+}
+.improve-box ul{list-style:none;display:flex;flex-direction:column;gap:9px;}
+.improve-box ul li{
+  display:flex;align-items:flex-start;gap:10px;
+  color:#94a3b8;font-size:14px;line-height:1.6;
+}
+.improve-box ul li::before{content:'→';color:var(--orange);font-weight:700;flex-shrink:0;}
+
+/* APPLY SECTION */
+.apply-section{
+  background:rgba(255,255,255,0.03);border:1px solid var(--border);
+  border-radius:24px;padding:36px;
+}
+.apply-section h2{font-family:'Syne',sans-serif;font-size:22px;margin-bottom:6px;}
+.apply-section .sub{color:var(--muted);font-size:14px;margin-bottom:28px;}
+
+.company-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:28px;}
+.company-card{
+  border:2px solid var(--border);border-radius:16px;padding:20px;
+  cursor:pointer;transition:0.3s;background:rgba(255,255,255,0.02);
+  text-align:center;
+}
+.company-card:hover,.company-card.selected{
+  border-color:var(--cyan);background:rgba(0,229,255,0.06);
+}
+.company-card .c-icon{
+  width:48px;height:48px;border-radius:12px;
+  background:rgba(0,229,255,0.08);border:1px solid rgba(0,229,255,0.15);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 12px;
+}
+.company-card .c-icon i{font-size:20px;color:var(--cyan);}
+.company-card h4{font-family:'Syne',sans-serif;font-size:15px;margin-bottom:4px;}
+.company-card p{color:var(--muted);font-size:12px;}
+.selected-badge{
+  display:none;margin:0 auto 8px;
+  width:24px;height:24px;border-radius:50%;
+  background:var(--cyan);color:var(--bg);
+  font-size:12px;align-items:center;justify-content:center;
+}
+.company-card.selected .selected-badge{display:flex;}
+
+.apply-btn{
+  width:100%;padding:16px;border:none;border-radius:14px;
+  background:linear-gradient(135deg,var(--green),#059669);
+  color:white;font-family:'Syne',sans-serif;font-size:16px;font-weight:700;
+  cursor:pointer;transition:0.4s;display:flex;align-items:center;justify-content:center;gap:10px;
+}
+.apply-btn:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(16,185,129,0.3);}
+.apply-btn:disabled{opacity:0.4;cursor:not-allowed;transform:none;}
+
+/* SCHEDULE CARD */
+.schedule-card{
+  display:none;
+  background:linear-gradient(135deg,rgba(0,229,255,0.06),rgba(139,92,246,0.06));
+  border:1px solid rgba(0,229,255,0.2);border-radius:22px;padding:32px;margin-top:24px;
+}
+.schedule-card h3{font-family:'Syne',sans-serif;font-size:20px;margin-bottom:20px;display:flex;align-items:center;gap:10px;}
+.schedule-card h3 i{color:var(--cyan);}
+.schedule-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.sched-item{
+  background:rgba(255,255,255,0.04);border:1px solid var(--border);
+  border-radius:14px;padding:18px;
+}
+.sched-item .label{font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;}
+.sched-item .value{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--cyan);}
+.sched-item .detail{font-size:13px;color:#94a3b8;margin-top:4px;}
+
+/* TEST SECTION */
+.test-section{
+  display:none;
+  background:rgba(255,255,255,0.03);border:1px solid var(--border);
+  border-radius:24px;padding:36px;margin-top:24px;
+}
+.test-section h2{font-family:'Syne',sans-serif;font-size:22px;margin-bottom:6px;}
+.test-section .sub{color:var(--muted);font-size:14px;margin-bottom:28px;}
+.test-q{
+  background:rgba(255,255,255,0.03);border:1px solid var(--border);
+  border-radius:16px;padding:22px;margin-bottom:16px;
+}
+.test-q .q-text{font-size:15px;margin-bottom:14px;font-weight:500;}
+.test-q .options{display:flex;flex-direction:column;gap:8px;}
+.test-q .opt{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 14px;border-radius:10px;cursor:pointer;
+  border:1px solid var(--border);background:rgba(255,255,255,0.02);
+  transition:0.3s;font-size:14px;
+}
+.test-q .opt:hover{border-color:var(--violet);background:rgba(139,92,246,0.06);}
+.test-q .opt.selected{border-color:var(--cyan);background:rgba(0,229,255,0.07);}
+.test-q .opt input{accent-color:var(--cyan);}
+.submit-test{
+  margin-top:20px;padding:14px 32px;border:none;border-radius:12px;
+  background:linear-gradient(135deg,var(--violet),var(--cyan));
+  color:white;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;
+  cursor:pointer;transition:0.4s;
+}
+.submit-test:hover{transform:translateY(-2px);box-shadow:0 10px 25px rgba(139,92,246,0.3);}
+
+/* TOAST */
+.toast{
+  position:fixed;bottom:24px;right:24px;z-index:9999;
+  padding:14px 22px;border-radius:14px;font-size:14px;color:white;
+  transform:translateY(80px);transition:transform 0.4s;
+  display:flex;align-items:center;gap:10px;max-width:340px;
+}
+.toast.show{transform:translateY(0);}
+.toast.success{background:#065f46;border:1px solid #10b981;}
+.toast.error{background:#7f1d1d;border:1px solid #ef4444;}
+.toast.info{background:#1e3a5f;border:1px solid var(--cyan);}
+
+@media(max-width:700px){
+  .eligibility{grid-template-columns:1fr;}
+  .schedule-grid{grid-template-columns:1fr;}
+  .company-grid{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Hire<span>Sense</span> AI</div>
+  <button class="back-btn" onclick="window.location.href='Main.html'">
+    <i class="fa-solid fa-arrow-left"></i> Back
+  </button>
+</nav>
+
+<div class="portal-wrap">
+  <div class="portal-header">
+    <h1>AI <span>Recruitment</span> Portal</h1>
+    <p>Upload your resume, get your ATS score, and start your career journey</p>
+  </div>
+
+  <!-- ELIGIBILITY INFO -->
+  <div class="eligibility">
+    <div class="elig-card">
+      <h3><i class="fa-solid fa-graduation-cap"></i> &nbsp;Qualifications</h3>
+      <div class="pill-list">
+        <span class="pill">BCA</span>
+        <span class="pill">MCA</span>
+        <span class="pill">CGPA ≥ 7.0</span>
+        <span class="pill">0–3 Years Experience</span>
+      </div>
+    </div>
+    <div class="elig-card">
+      <h3><i class="fa-solid fa-code"></i> &nbsp;Required Skills</h3>
+      <div class="pill-list">
+        <span class="pill highlight">Python</span>
+        <span class="pill highlight">Java</span>
+        <span class="pill highlight">HTML & CSS</span>
+        <span class="pill highlight">JavaScript</span>
+        <span class="pill highlight">SQL</span>
+        <span class="pill highlight">Data Structures</span>
+        <span class="pill highlight">DBMS</span>
+        <span class="pill highlight">React / Angular</span>
+        <span class="pill highlight">Problem Solving</span>
+        <span class="pill highlight">Communication</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- UPLOAD SECTION -->
+  <div class="upload-section">
+    <h2><i class="fa-solid fa-file-arrow-up" style="color:var(--cyan);margin-right:10px;"></i>Upload Your Resume</h2>
+    <p class="sub">PDF format recommended · ATS minimum score: 60/100 · NLP-powered analysis</p>
+    <div class="drop-zone" id="dropZone">
+      <input type="file" id="resumeFile" accept=".pdf,.doc,.docx" onchange="fileSelected(this)">
+      <i class="fa-solid fa-cloud-arrow-up"></i>
+      <p>Drag & drop your resume here or <span>browse files</span></p>
+      <p style="font-size:12px;color:var(--muted);margin-top:8px;">Supported: PDF, DOC, DOCX</p>
+    </div>
+    <div class="file-info" id="fileInfo">
+      <i class="fa-solid fa-circle-check"></i>
+      <span id="fileName">resume.pdf</span>
+    </div>
+    <button class="check-btn" id="checkBtn" onclick="checkATS()" disabled>
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <span id="checkBtnText">Analyse Resume</span>
+      <div class="spinner" id="spinner"></div>
+    </button>
+  </div>
+
+  <!-- RESULT SECTION -->
+  <div class="result-section" id="resultSection">
+
+    <!-- SCORE CARD -->
+    <div class="score-card" id="scoreCard">
+      <div class="score-ring">
+        <svg viewBox="0 0 120 120" width="130" height="130">
+          <circle class="track" cx="60" cy="60" r="54"/>
+          <circle class="prog" id="scoreCircle" cx="60" cy="60" r="54"/>
+        </svg>
+        <div class="score-num" id="scoreNum">0<span class="pct">%</span></div>
+      </div>
+      <div class="score-status" id="scoreStatus"></div>
+      <div class="score-msg" id="scoreMsg"></div>
+      <div class="skills-row" id="skillsRow"></div>
+    </div>
+
+    <!-- IMPROVE TIPS (shown if not eligible) -->
+    <div class="improve-box" id="improveBox" style="display:none;">
+      <h3><i class="fa-solid fa-lightbulb"></i> How to Improve Your ATS Score</h3>
+      <ul>
+        <li>Add relevant keywords from the job description prominently in your resume</li>
+        <li>Include core skills: Python, Java, SQL, HTML/CSS, JavaScript, Data Structures</li>
+        <li>List your BCA/MCA projects with tech stacks used</li>
+        <li>Add measurable achievements (e.g., "Built web app with 500+ users")</li>
+        <li>Use standard section headings: Skills, Education, Projects, Experience</li>
+        <li>Avoid images, tables, or columns that ATS systems struggle to parse</li>
+      </ul>
+    </div>
+
+    <!-- APPLY (shown if eligible) -->
+    <div class="apply-section" id="applySection" style="display:none;">
+      <h2><i class="fa-solid fa-building-columns" style="color:var(--cyan);margin-right:10px;"></i>Select Your Company</h2>
+      <p class="sub">Choose a company to apply for. Test and interview schedule will be generated automatically.</p>
+      <div class="company-grid" id="companyGrid"></div>
+      <button class="apply-btn" id="applyBtn" onclick="applyToCompany()" disabled>
+        <i class="fa-solid fa-paper-plane"></i> Apply & Get Schedule
+      </button>
+      <div class="schedule-card" id="scheduleCard">
+        <h3><i class="fa-solid fa-calendar-check"></i> Your Schedule</h3>
+        <div class="schedule-grid" id="scheduleGrid"></div>
+      </div>
+    </div>
+
+    <!-- TEST SECTION -->
+    <div class="test-section" id="testSection">
+      <h2><i class="fa-solid fa-pen-to-square" style="color:var(--violet);margin-right:10px;"></i>Aptitude Test</h2>
+      <p class="sub">Answer all questions correctly to unlock your HR interview date. Score ≥ 60% to pass.</p>
+      <div id="questionsWrap"></div>
+      <button class="submit-test" onclick="submitTest()">Submit Test <i class="fa-solid fa-arrow-right"></i></button>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== COMPANIES =====
+const companies = [
+  { name:'TCS', role:'Software Engineer', icon:'fa-laptop-code' },
+  { name:'Infosys', role:'Systems Engineer', icon:'fa-server' },
+  { name:'Wipro', role:'Project Engineer', icon:'fa-code' },
+  { name:'HCL', role:'Technical Associate', icon:'fa-microchip' },
+  { name:'Cognizant', role:'Programmer Analyst', icon:'fa-brain' },
+  { name:'Tech Mahindra', role:'Software Developer', icon:'fa-globe' },
+];
+
+// ===== APTITUDE QUESTIONS =====
+const questions = [
+  { q:'What does HTML stand for?', opts:['HyperText Markup Language','High Tech Machine Learning','Hyper Transfer Markup Language','None of these'], ans:0 },
+  { q:'Which of these is a primary key property in DBMS?', opts:['Can be NULL','Must be unique','Can repeat','None of the above'], ans:1 },
+  { q:'What is the time complexity of binary search?', opts:['O(n)','O(n²)','O(log n)','O(1)'], ans:2 },
+  { q:'Which language is primarily used for web styling?', opts:['Python','Java','CSS','SQL'], ans:2 },
+  { q:'What does SQL stand for?', opts:['Structured Query Language','Simple Query Logic','Sorted Query Lookup','None'], ans:0 },
+];
+
+let selectedCompany = null;
+let selectedAnswers = {};
+let atsScore = 0;
+
+// SKILLS
+const requiredSkills = ['python','java','html','css','javascript','sql','data structures','dbms','react','angular','problem solving'];
+
+// ===== DRAG & DROP =====
+const dz = document.getElementById('dropZone');
+dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('dragover'); });
+dz.addEventListener('dragleave', () => dz.classList.remove('dragover'));
+dz.addEventListener('drop', e => {
+  e.preventDefault(); dz.classList.remove('dragover');
+  document.getElementById('resumeFile').files = e.dataTransfer.files;
+  fileSelected(document.getElementById('resumeFile'));
+});
+
+function fileSelected(input) {
+  const file = input.files[0];
+  if (!file) return;
+  document.getElementById('fileInfo').style.display = 'flex';
+  document.getElementById('fileName').textContent = file.name;
+  document.getElementById('checkBtn').disabled = false;
+}
+
+function toast(msg, type='info') {
+  const t = document.getElementById('toast');
+  t.className = `toast ${type} show`;
+  t.innerHTML = `<i class="fa-solid fa-${type==='success'?'circle-check':type==='error'?'circle-exclamation':'circle-info'}"></i> ${msg}`;
+  setTimeout(() => t.classList.remove('show'), 4000);
+}
+
+// ===== ATS CHECK (simulated NLP scoring) =====
+async function checkATS() {
+  const file = document.getElementById('resumeFile').files[0];
+  if (!file) return toast('Please upload a resume first.', 'error');
+
+  // Show spinner
+  document.getElementById('checkBtn').disabled = true;
+  document.getElementById('checkBtnText').textContent = 'Analysing...';
+  document.getElementById('spinner').style.display = 'block';
+
+  // Simulate NLP processing delay
+  await new Promise(r => setTimeout(r, 2200));
+
+  // Simulate ATS scoring based on filename keywords (real version uses Python backend)
+  const name = file.name.toLowerCase();
+  let score = Math.floor(Math.random() * 41) + 45; // 45–85 range for demo
+  // Boost if filename contains skill keywords
+  if (name.includes('python') || name.includes('java') || name.includes('dev')) score = Math.min(score + 10, 100);
+
+  atsScore = score;
+  renderResult(score);
+
+  document.getElementById('spinner').style.display = 'none';
+  document.getElementById('checkBtnText').textContent = 'Re-Analyse';
+  document.getElementById('checkBtn').disabled = false;
+}
+
+function renderResult(score) {
+  const eligible = score >= 60;
+  document.getElementById('resultSection').style.display = 'block';
+  document.getElementById('resultSection').scrollIntoView({ behavior:'smooth', block:'start' });
+
+  // Score ring color
+  const card = document.getElementById('scoreCard');
+  card.className = 'score-card ' + (eligible ? 'eligible' : 'noteligible');
+
+  const circle = document.getElementById('scoreCircle');
+  circle.style.stroke = eligible ? '#10b981' : '#ef4444';
+  const circumference = 2 * Math.PI * 54;
+  circle.style.strokeDasharray = circumference;
+  setTimeout(() => {
+    circle.style.strokeDashoffset = circumference - (score / 100) * circumference;
+  }, 100);
+
+  // Animate number
+  let current = 0;
+  const interval = setInterval(() => {
+    current++;
+    document.getElementById('scoreNum').innerHTML = `${current}<span class="pct">%</span>`;
+    if (current >= score) clearInterval(interval);
+  }, 25);
+
+  document.getElementById('scoreStatus').textContent = eligible ? '✅ Eligible for Hiring Process!' : '❌ Not Eligible — Score Too Low';
+  document.getElementById('scoreMsg').textContent = eligible
+    ? `Your ATS score of ${score}% meets the minimum threshold of 60%. You can now apply to companies below.`
+    : `Your ATS score of ${score}% is below the minimum threshold of 60%. Please improve your resume skills and try again.`;
+
+  // Sample matched/missed skills
+  const sampleMatched = requiredSkills.slice(0, Math.floor(score / 10));
+  const missed = requiredSkills.slice(Math.floor(score / 10));
+  const row = document.getElementById('skillsRow');
+  row.innerHTML = sampleMatched.map(s => `<span class="s-pill match"><i class="fa-solid fa-check" style="margin-right:5px;"></i>${s}</span>`).join('')
+    + missed.slice(0,4).map(s => `<span class="s-pill miss"><i class="fa-solid fa-xmark" style="margin-right:5px;"></i>${s}</span>`).join('');
+
+  document.getElementById('improveBox').style.display = eligible ? 'none' : 'block';
+  document.getElementById('applySection').style.display = eligible ? 'block' : 'none';
+
+  if (eligible) {
+    renderCompanies();
+    toast('Great! ATS Score ' + score + '% — You are eligible to apply!', 'success');
+  } else {
+    toast('ATS Score ' + score + '% — Below 60%. Improve your skills!', 'error');
+  }
+}
+
+function renderCompanies() {
+  const grid = document.getElementById('companyGrid');
+  grid.innerHTML = companies.map((c, i) => `
+    <div class="company-card" id="cc${i}" onclick="selectCompany(${i})">
+      <div class="selected-badge"><i class="fa-solid fa-check"></i></div>
+      <div class="c-icon"><i class="fa-solid ${c.icon}"></i></div>
+      <h4>${c.name}</h4>
+      <p>${c.role}</p>
+    </div>
+  `).join('');
+}
+
+function selectCompany(i) {
+  document.querySelectorAll('.company-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById('cc' + i).classList.add('selected');
+  selectedCompany = companies[i];
+  document.getElementById('applyBtn').disabled = false;
+}
+
+function applyToCompany() {
+  if (!selectedCompany) return toast('Please select a company first.', 'error');
+
+  // Generate test & interview dates
+  const today = new Date();
+  const testDate = new Date(today); testDate.setDate(today.getDate() + 7);
+  const interviewDate = new Date(today); interviewDate.setDate(today.getDate() + 21);
+
+  const fmt = d => d.toLocaleDateString('en-IN', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+
+  document.getElementById('scheduleGrid').innerHTML = `
+    <div class="sched-item">
+      <div class="label">Company</div>
+      <div class="value">${selectedCompany.name}</div>
+      <div class="detail">${selectedCompany.role}</div>
+    </div>
+    <div class="sched-item">
+      <div class="label">ATS Score</div>
+      <div class="value">${atsScore}%</div>
+      <div class="detail">Eligible ✅</div>
+    </div>
+    <div class="sched-item">
+      <div class="label">Aptitude Test Date</div>
+      <div class="value" style="font-size:14px;">${fmt(testDate)}</div>
+      <div class="detail">10:00 AM – Online</div>
+    </div>
+    <div class="sched-item">
+      <div class="label">HR Interview Date</div>
+      <div class="value" style="font-size:14px;color:#a7f3d0;">Pending Test Result</div>
+      <div class="detail">Scheduled after test pass</div>
+    </div>
+  `;
+
+  document.getElementById('scheduleCard').style.display = 'block';
+  document.getElementById('scheduleCard').scrollIntoView({ behavior:'smooth' });
+  toast(`Applied to ${selectedCompany.name}! Test scheduled.`, 'success');
+
+  // Show aptitude test after 1.5s
+  setTimeout(() => {
+    renderTest();
+    document.getElementById('testSection').style.display = 'block';
+    document.getElementById('testSection').scrollIntoView({ behavior:'smooth' });
+  }, 1500);
+}
+
+function renderTest() {
+  const wrap = document.getElementById('questionsWrap');
+  wrap.innerHTML = questions.map((q, qi) => `
+    <div class="test-q">
+      <div class="q-text">Q${qi+1}. ${q.q}</div>
+      <div class="options">
+        ${q.opts.map((o, oi) => `
+          <label class="opt" onclick="selectOpt(${qi},${oi},this)">
+            <input type="radio" name="q${qi}" value="${oi}"> ${o}
+          </label>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+function selectOpt(qi, oi, el) {
+  document.querySelectorAll(`[name="q${qi}"]`).forEach(r => {
+    r.closest('.opt').classList.remove('selected');
+  });
+  el.classList.add('selected');
+  selectedAnswers[qi] = oi;
+}
+
+function submitTest() {
+  if (Object.keys(selectedAnswers).length < questions.length) {
+    return toast('Please answer all questions before submitting.', 'error');
+  }
+  let correct = 0;
+  questions.forEach((q, i) => { if (selectedAnswers[i] === q.ans) correct++; });
+  const testScore = Math.round((correct / questions.length) * 100);
+
+  if (testScore >= 60) {
+    const today = new Date();
+    const interviewDate = new Date(today); interviewDate.setDate(today.getDate() + 21);
+    const fmt = d => d.toLocaleDateString('en-IN', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+
+    // Update interview date in schedule
+    document.getElementById('scheduleGrid').innerHTML += '';
+    const items = document.querySelectorAll('.sched-item');
+    if (items[3]) {
+      items[3].querySelector('.value').textContent = fmt(interviewDate);
+      items[3].querySelector('.value').style.color = 'var(--cyan)';
+      items[3].querySelector('.detail').textContent = '2:00 PM – Video Call ✅';
+    }
+
+    toast(`🎉 Test Passed! Score: ${testScore}%. HR Interview scheduled!`, 'success');
+    document.getElementById('scheduleCard').scrollIntoView({ behavior:'smooth' });
+  } else {
+    toast(`Test Score: ${testScore}% — Below 60%. Please prepare and try again.`, 'error');
+  }
+}
+</script>
+</body>
+</html>
